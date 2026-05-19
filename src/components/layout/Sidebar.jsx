@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase/config';
@@ -19,7 +19,9 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-logo">Study<span>Flow</span></div>
+      <Link to="/" className="sidebar-logo-link">
+        <div className="sidebar-logo">Study<span>Flow</span></div>
+      </Link>
 
       <nav>
         <div className="nav-section-label">Nawigacja</div>
