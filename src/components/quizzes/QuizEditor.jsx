@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-function QuestionItem({ q, index, onChange, onDelete }) {
+function QuestionItem({ q, index, onChange, onDelete, isNew }) {
+    const questionRef = useRef(null);
     const isMulti = q.multiCorrect || false;
+
+    useEffect(() => {
+        if (isNew && questionRef.current) {
+            questionRef.current.focus();
+        }
+    }, [isNew]);
 
     const toggleCorrect = (oi) => {
         if (isMulti) {
@@ -45,7 +52,8 @@ function QuestionItem({ q, index, onChange, onDelete }) {
             <div className="form-group">
                 <label className="form-label">Treść pytania</label>
                 <input
-                    className="form-input"
+                    ref={questionRef}
+                    className="form-input question-input"
                     value={q.question}
                     onChange={e => onChange(index, { ...q, question: e.target.value })}
                     placeholder="Wpisz pytanie..."
@@ -64,7 +72,6 @@ function QuestionItem({ q, index, onChange, onDelete }) {
                                 name={`correct-${index}`}
                                 checked={isChecked(oi)}
                                 onChange={() => toggleCorrect(oi)}
-                                title={isMulti ? 'Poprawna odpowiedź' : 'Poprawna odpowiedź'}
                             />
                             <span className="option-letter">{String.fromCharCode(65 + oi)}</span>
                             <input
@@ -86,31 +93,42 @@ function QuestionItem({ q, index, onChange, onDelete }) {
 }
 
 export default function QuizEditor({ initial, onSave, onCancel }) {
+    const titleRef = useRef(null);
     const [title, setTitle] = useState(initial?.title || initial?.name || '');
     const [questions, setQuestions] = useState(initial?.questions || []);
     const [isPublic, setIsPublic] = useState(initial?.public || false);
     const [saving, setSaving] = useState(false);
+    const [newQuestionIndex, setNewQuestionIndex] = useState(null);
+
+    useEffect(() => {
+        if (titleRef.current) titleRef.current.focus();
+    }, []);
 
     const addQuestion = () => {
+        const newIndex = questions.length;
         setQuestions(q => [...q, {
             question: '',
             options: ['', '', '', ''],
             correct: 0,
             multiCorrect: false,
         }]);
+        setNewQuestionIndex(newIndex);
     };
 
     const updateQuestion = (i, q) => {
         setQuestions(prev => prev.map((item, idx) => idx === i ? q : item));
+        if (newQuestionIndex === i) setNewQuestionIndex(null);
     };
 
     const deleteQuestion = (i) => {
         setQuestions(prev => prev.filter((_, idx) => idx !== i));
+        setNewQuestionIndex(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSaving(true);
+        console.log('isPublic:', isPublic);
         await onSave({ title, questions, public: isPublic });
         setSaving(false);
     };
@@ -120,6 +138,7 @@ export default function QuizEditor({ initial, onSave, onCancel }) {
             <div className="form-group">
                 <label className="form-label">Tytuł quizu</label>
                 <input
+                    ref={titleRef}
                     className="form-input"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
@@ -135,7 +154,14 @@ export default function QuizEditor({ initial, onSave, onCancel }) {
 
             <div className="questions-list">
                 {questions.map((q, i) => (
-                    <QuestionItem key={i} q={q} index={i} onChange={updateQuestion} onDelete={deleteQuestion} />
+                    <QuestionItem
+                        key={i}
+                        q={q}
+                        index={i}
+                        onChange={updateQuestion}
+                        onDelete={deleteQuestion}
+                        isNew={newQuestionIndex === i}
+                    />
                 ))}
             </div>
 

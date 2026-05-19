@@ -17,7 +17,6 @@
   --border-mid: rgba(255, 255, 255, 0.13);
 
 
-
   --bg            : #080A0F;
   --bg-secondary  : #0e1117;
   --bg-card       : #111827;
@@ -1127,6 +1126,16 @@ a .stat-card:hover {
 }
 
 /* ── Quiz editor option rows ── */
+.question-input {
+  border-color: rgba(79, 156, 249, 0.4) !important;
+  background  : rgba(79, 156, 249, 0.05) !important;
+}
+
+.question-input:focus {
+  border-color: var(--accent) !important;
+  background  : rgba(79, 156, 249, 0.08) !important;
+}
+
 .option-row {
   display      : flex;
   align-items  : center;
