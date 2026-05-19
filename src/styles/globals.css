@@ -1,6 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 
+/* ── Etap 1 compatibility vars (Auth.jsx) ── */
 :root {
+  --bg        : #080A0F;
+  --bg-2      : #0e1117;
+  --bg-3      : #111827;
+  --bg-4      : #161f30;
+  --blue      : #4f9cf9;
+  --coral     : #f87171;
+  --green     : #34d399;
+  --amber     : #fbbf24;
+  --text      : #e8edf5;
+  --text-2    : #8892a4;
+  --text-3    : #4d5669;
+  --border    : rgba(255, 255, 255, 0.07);
+  --border-mid: rgba(255, 255, 255, 0.13);
+
+
+
   --bg            : #080A0F;
   --bg-secondary  : #0e1117;
   --bg-card       : #111827;
@@ -20,6 +37,7 @@
   --radius-md     : 10px;
   --radius-lg     : 14px;
   --radius-xl     : 20px;
+
 }
 
 *,
@@ -1109,7 +1127,91 @@ a .stat-card:hover {
   color     : var(--text-muted);
 }
 
-/* ── Bottom nav (mobile) ── */
+/* ── Export PDF modal ── */
+.export-select-all {
+  padding-bottom: 0.75rem;
+  border-bottom : 1px solid var(--border);
+}
+
+.export-notes-list {
+  display       : flex;
+  flex-direction: column;
+  gap           : 4px;
+  max-height    : 360px;
+  overflow-y    : auto;
+}
+
+.export-note-item {
+  display      : flex;
+  align-items  : center;
+  gap          : 10px;
+  padding      : 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  cursor       : pointer;
+  transition   : background 0.15s;
+}
+
+.export-note-item:hover {
+  background: var(--bg-card-hover);
+}
+
+.export-note-info {
+  display    : flex;
+  align-items: center;
+  gap        : 8px;
+  flex       : 1;
+  min-width  : 0;
+}
+
+.export-note-title {
+  font-size    : 14px;
+  color        : var(--text-primary);
+  overflow     : hidden;
+  white-space  : nowrap;
+  text-overflow: ellipsis;
+}
+
+.public-shell {
+  min-height    : 100vh;
+  background    : var(--bg);
+  display       : flex;
+  flex-direction: column;
+}
+
+.public-header {
+  padding      : 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background   : var(--bg-secondary);
+}
+
+.public-logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size  : 1.2rem;
+  font-weight: 700;
+  color      : var(--text-primary);
+}
+
+.public-logo span {
+  color: var(--accent);
+}
+
+.public-main {
+  flex           : 1;
+  display        : flex;
+  align-items    : flex-start;
+  justify-content: center;
+  padding        : 3rem 1rem;
+}
+
+.public-card {
+  background   : var(--bg-card);
+  border       : 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding      : 2rem;
+  width        : 100%;
+  max-width    : 640px;
+}
+
 .bottom-nav {
   display   : none;
   position  : fixed;

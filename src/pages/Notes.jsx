@@ -1,18 +1,17 @@
 import { useState, useMemo } from 'react';
 import { useNotes } from '../hooks/useNotes';
-import { usePDF } from '../hooks/usePDF';
 import Modal from '../components/ui/Modal';
 import NoteEditor from '../components/notes/NoteEditor';
+import ExportPDFModal from '../components/notes/ExportPDFModal';
 
 export default function Notes() {
     const { notes, loading, addNote, updateNote, deleteNote } = useNotes();
-    const { exportNote, exportAllNotes } = usePDF();
     const [search, setSearch] = useState('');
     const [filterCat, setFilterCat] = useState('');
     const [sort, setSort] = useState('updatedAt');
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState(null);
-    const [exporting, setExporting] = useState(false);
+    const [exportOpen, setExportOpen] = useState(false);
 
     const categories = useMemo(() => [...new Set(notes.map(n => n.category).filter(Boolean))], [notes]);
 
@@ -41,13 +40,6 @@ export default function Notes() {
         if (confirm('Usunąć tę notatkę?')) await deleteNote(id);
     };
 
-    const handleExportAll = async () => {
-        if (!filtered.length) return;
-        setExporting(true);
-        await exportAllNotes(filtered);
-        setExporting(false);
-    };
-
     return (
         <div className="page">
             <header className="page-header">
@@ -57,8 +49,8 @@ export default function Notes() {
                 </div>
                 <div className="header-actions">
                     {notes.length > 0 && (
-                        <button className="btn-secondary" onClick={handleExportAll} disabled={exporting}>
-                            {exporting ? '⏳' : '📄'} Eksportuj PDF
+                        <button className="btn-secondary" onClick={() => setExportOpen(true)}>
+                            📄 Eksportuj PDF
                         </button>
                     )}
                     <button className="btn-primary" onClick={openNew}>+ Nowa notatka</button>
@@ -98,11 +90,6 @@ export default function Notes() {
                                 <h3 className="note-card-title">{note.title || 'Bez tytułu'}</h3>
                                 <div className="note-card-btns">
                                     <button
-                                        className="icon-btn"
-                                        onClick={e => { e.stopPropagation(); exportNote(note); }}
-                                        title="Eksportuj do PDF"
-                                    >📄</button>
-                                    <button
                                         className="icon-btn danger"
                                         onClick={e => { e.stopPropagation(); handleDelete(note.id); }}
                                         title="Usuń"
@@ -127,6 +114,12 @@ export default function Notes() {
                     onCancel={closeModal}
                 />
             </Modal>
+
+            <ExportPDFModal
+                isOpen={exportOpen}
+                onClose={() => setExportOpen(false)}
+                notes={notes}
+            />
         </div>
     );
 }
