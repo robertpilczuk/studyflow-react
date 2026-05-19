@@ -29,7 +29,6 @@ export function useQuizzes() {
         return addDoc(collection(db, 'quizzes'), {
             ...data,
             uid: user.uid,
-            public: false,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
         });
