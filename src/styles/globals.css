@@ -478,6 +478,12 @@ a .stat-card:hover {
   gap            : 8px;
 }
 
+.note-card-btns {
+  display    : flex;
+  gap        : 4px;
+  flex-shrink: 0;
+}
+
 .note-card-title {
   font-size    : 15px;
   font-weight  : 600;
