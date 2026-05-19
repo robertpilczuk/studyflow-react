@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useNotes } from '../hooks/useNotes';
+import { useConfirm } from '../components/ui/ConfirmDialog';
 import Modal from '../components/ui/Modal';
 import NoteEditor from '../components/notes/NoteEditor';
 import ExportPDFModal from '../components/notes/ExportPDFModal';
 
 export default function Notes() {
     const { notes, loading, addNote, updateNote, deleteNote } = useNotes();
+    const confirm = useConfirm();
     const [search, setSearch] = useState('');
     const [filterCat, setFilterCat] = useState('');
     const [sort, setSort] = useState('updatedAt');
@@ -37,7 +39,8 @@ export default function Notes() {
     };
 
     const handleDelete = async (id) => {
-        if (confirm('Usunąć tę notatkę?')) await deleteNote(id);
+        const ok = await confirm('Usunąć tę notatkę?', { confirmLabel: 'Usuń' });
+        if (ok) await deleteNote(id);
     };
 
     return (

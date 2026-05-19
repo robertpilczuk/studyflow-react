@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useFlashcards } from '../hooks/useFlashcards';
 import { useGemini } from '../hooks/useGemini';
+import { useConfirm } from '../components/ui/ConfirmDialog';
 import Modal from '../components/ui/Modal';
 import DeckEditor from '../components/flashcards/DeckEditor';
 import FlashcardReview from '../components/flashcards/FlashcardReview';
@@ -8,6 +9,7 @@ import FlashcardReview from '../components/flashcards/FlashcardReview';
 export default function Flashcards() {
     const { decks, loading, addDeck, updateDeck, deleteDeck, reviewCard, getDueCards } = useFlashcards();
     const { generateFlashcards } = useGemini();
+    const confirm = useConfirm();
     const [modalMode, setModalMode] = useState(null);
     const [selected, setSelected] = useState(null);
     const [genTopic, setGenTopic] = useState('');
@@ -24,7 +26,8 @@ export default function Flashcards() {
     };
 
     const handleDelete = async (id) => {
-        if (confirm('Usunąć tę talię?')) await deleteDeck(id);
+        const ok = await confirm('Usunąć tę talię?', { confirmLabel: 'Usuń' });
+        if (ok) await deleteDeck(id);
     };
 
     const handleGenerate = async () => {

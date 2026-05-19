@@ -17,6 +17,7 @@
   --border-mid: rgba(255, 255, 255, 0.13);
 
 
+
   --bg            : #080A0F;
   --bg-secondary  : #0e1117;
   --bg-card       : #111827;
@@ -1125,7 +1126,46 @@ a .stat-card:hover {
   color     : var(--text-muted);
 }
 
-/* ── Quiz editor option rows ── */
+/* ── Confirm dialog ── */
+.confirm-dialog {
+  background   : var(--bg-card);
+  border       : 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding      : 1.75rem;
+  width        : 100%;
+  max-width    : 360px;
+}
+
+.confirm-message {
+  font-size    : 15px;
+  color        : var(--text-primary);
+  margin-bottom: 1.5rem;
+  line-height  : 1.5;
+}
+
+.confirm-actions {
+  display        : flex;
+  justify-content: flex-end;
+  gap            : 0.75rem;
+}
+
+.btn-danger {
+  background   : var(--accent-red);
+  color        : #fff;
+  border       : none;
+  border-radius: var(--radius-md);
+  padding      : 0.55rem 1.1rem;
+  font-size    : 14px;
+  font-weight  : 600;
+  cursor       : pointer;
+  transition   : opacity 0.15s;
+}
+
+.btn-danger:hover {
+  opacity: 0.85;
+}
+
+
 .question-input {
   border-color: rgba(79, 156, 249, 0.4) !important;
   background  : rgba(79, 156, 249, 0.05) !important;

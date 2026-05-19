@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ConfirmProvider } from './components/ui/ConfirmDialog';
 import ProtectedRoute from './components/shared/ProtectedRoute';
 import Layout from './components/layout/Layout';
 import Auth from './pages/Auth';
@@ -14,45 +15,47 @@ export default function App() {
   return (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AuthProvider>
-        <Routes>
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/quiz" element={<PublicQuiz />} />
-          <Route path="/" element={
-            <ProtectedRoute>
-              <Layout>
-                <Dashboard />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          <Route path="/notes" element={
-            <ProtectedRoute>
-              <Layout>
-                <Notes />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          <Route path="/quizzes" element={
-            <ProtectedRoute>
-              <Layout>
-                <Quizzes />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          <Route path="/flashcards" element={
-            <ProtectedRoute>
-              <Layout>
-                <Flashcards />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          <Route path="/analytics" element={
-            <ProtectedRoute>
-              <Layout>
-                <Analytics />
-              </Layout>
-            </ProtectedRoute>
-          } />
-        </Routes>
+        <ConfirmProvider>
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/quiz" element={<PublicQuiz />} />
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Dashboard />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/notes" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Notes />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/quizzes" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Quizzes />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/flashcards" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Flashcards />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/analytics" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Analytics />
+                </Layout>
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </ConfirmProvider>
       </AuthProvider>
     </BrowserRouter>
   );

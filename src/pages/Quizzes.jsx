@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuizzes } from '../hooks/useQuizzes';
 import { useGemini } from '../hooks/useGemini';
+import { useConfirm } from '../components/ui/ConfirmDialog';
 import Modal from '../components/ui/Modal';
 import QuizEditor from '../components/quizzes/QuizEditor';
 import QuizPlayer from '../components/quizzes/QuizPlayer';
@@ -8,6 +9,7 @@ import QuizPlayer from '../components/quizzes/QuizPlayer';
 export default function Quizzes() {
     const { quizzes, loading, addQuiz, updateQuiz, deleteQuiz, saveResult } = useQuizzes();
     const { generateQuiz } = useGemini();
+    const confirm = useConfirm();
     const [modalMode, setModalMode] = useState(null); // null | 'new' | 'edit' | 'play' | 'generate'
     const [selected, setSelected] = useState(null);
     const [genTopic, setGenTopic] = useState('');
@@ -24,7 +26,8 @@ export default function Quizzes() {
     };
 
     const handleDelete = async (id) => {
-        if (confirm('Usunąć ten quiz?')) await deleteQuiz(id);
+        const ok = await confirm('Usunąć ten quiz?', { confirmLabel: 'Usuń' });
+        if (ok) await deleteQuiz(id);
     };
 
     const handleGenerate = async () => {

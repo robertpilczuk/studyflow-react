@@ -128,7 +128,6 @@ export default function QuizEditor({ initial, onSave, onCancel }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSaving(true);
-        console.log('isPublic:', isPublic);
         await onSave({ title, questions, public: isPublic });
         setSaving(false);
     };
