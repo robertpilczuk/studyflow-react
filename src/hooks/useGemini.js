@@ -53,6 +53,7 @@ Odpowiedź tylko w JSON (tablica), format każdego elementu:
         const clean = raw.replace(/```json|```/g, '').trim();
         const questions = JSON.parse(clean);
         await incrementUsage(user.uid, 'quiz');
+        window.dispatchEvent(new Event('gemini-usage-updated'));
         return questions;
     }, [user]);
 
@@ -64,9 +65,14 @@ Odpowiedź tylko w JSON (tablica), format każdego elementu:
 {"front": "pytanie/pojęcie", "back": "odpowiedź/definicja"}
 Bez żadnego tekstu poza JSON.`;
         const raw = await callGemini(prompt);
+        console.log('raw:', raw);
         const clean = raw.replace(/```json|```/g, '').trim();
+        console.log('clean:', clean);
         const cards = JSON.parse(clean);
+        console.log('cards:', cards);
         await incrementUsage(user.uid, 'flashcard');
+        window.dispatchEvent(new Event('gemini-usage-updated'));
+
         return cards;
     }, [user]);
 

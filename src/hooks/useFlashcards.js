@@ -46,9 +46,9 @@ export function useFlashcards() {
 
     const addDeck = useCallback(async (data) => {
         return addDoc(collection(db, 'decks'), {
+            cards: [],
             ...data,
             uid: user.uid,
-            cards: [],
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
         });
