@@ -52,8 +52,9 @@ export default function Analytics() {
                 const quiz = quizzes.find(q => q.id === entry.quizId);
                 if (!quiz) return null;
                 const quizName = quiz.title || quiz.name;
-                const label = quizName
-                    ? (quizName.length > 16 ? quizName.slice(0, 16) + '…' : quizName)
+                const nameStr = typeof quizName === 'string' ? quizName : String(quizName || '');
+                const label = nameStr
+                    ? (nameStr.length > 16 ? nameStr.slice(0, 16) + '…' : nameStr)
                     : entry.quizId.slice(0, 8);
                 return {
                     name: label,

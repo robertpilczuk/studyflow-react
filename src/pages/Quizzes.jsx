@@ -5,6 +5,7 @@ import { useConfirm } from '../components/ui/ConfirmDialog';
 import Modal from '../components/ui/Modal';
 import QuizEditor from '../components/quizzes/QuizEditor';
 import QuizPlayer from '../components/quizzes/QuizPlayer';
+import GeminiUsage from '../components/ui/GeminiUsage';
 
 export default function Quizzes() {
     const { quizzes, loading, addQuiz, updateQuiz, deleteQuiz, saveResult } = useQuizzes();
@@ -68,6 +69,7 @@ export default function Quizzes() {
                     <button className="btn-primary" onClick={() => setModalMode('new')}>+ Nowy quiz</button>
                 </div>
             </header>
+            <GeminiUsage />
 
             {loading ? (
                 <div className="loading-state">Ładowanie...</div>

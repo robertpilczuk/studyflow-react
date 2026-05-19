@@ -5,6 +5,7 @@ import { useConfirm } from '../components/ui/ConfirmDialog';
 import Modal from '../components/ui/Modal';
 import DeckEditor from '../components/flashcards/DeckEditor';
 import FlashcardReview from '../components/flashcards/FlashcardReview';
+import GeminiUsage from '../components/ui/GeminiUsage';
 
 export default function Flashcards() {
     const { decks, loading, addDeck, updateDeck, deleteDeck, reviewCard, getDueCards } = useFlashcards();
@@ -62,6 +63,7 @@ export default function Flashcards() {
                     <button className="btn-primary" onClick={() => setModalMode('new')}>+ Nowa talia</button>
                 </div>
             </header>
+            <GeminiUsage />
 
             {loading ? (
                 <div className="loading-state">Ładowanie...</div>

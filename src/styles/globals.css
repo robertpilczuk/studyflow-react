@@ -1126,7 +1126,68 @@ a .stat-card:hover {
   color     : var(--text-muted);
 }
 
-/* ── Confirm dialog ── */
+/* ── Gemini usage ── */
+.gemini-usage {
+  display      : flex;
+  align-items  : center;
+  gap          : 1rem;
+  background   : var(--bg-card);
+  border       : 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding      : 0.75rem 1.25rem;
+  margin-bottom: 1.5rem;
+  flex-wrap    : wrap;
+}
+
+.gemini-label {
+  font-size  : 13px;
+  font-weight: 500;
+  color      : var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.gemini-counters {
+  display: flex;
+  gap    : 1.25rem;
+  flex   : 1;
+}
+
+.gemini-counter {
+  display    : flex;
+  align-items: center;
+  gap        : 8px;
+  flex       : 1;
+}
+
+.gemini-type {
+  font-size  : 12px;
+  color      : var(--text-secondary);
+  flex-shrink: 0;
+  min-width  : 36px;
+}
+
+.gemini-bar-track {
+  flex         : 1;
+  height       : 4px;
+  background   : var(--border);
+  border-radius: 2px;
+  overflow     : hidden;
+}
+
+.gemini-bar-fill {
+  height       : 100%;
+  border-radius: 2px;
+  transition   : width 0.3s;
+}
+
+.gemini-num {
+  font-size  : 12px;
+  font-family: 'JetBrains Mono', monospace;
+  color      : var(--text-muted);
+  flex-shrink: 0;
+}
+
+
 .confirm-dialog {
   background   : var(--bg-card);
   border       : 1px solid var(--border);
