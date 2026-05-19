@@ -40,7 +40,7 @@ function QuestionItem({ q, index, onChange, onDelete }) {
 }
 
 export default function QuizEditor({ initial, onSave, onCancel }) {
-    const [title, setTitle] = useState(initial?.title || '');
+    const [title, setTitle] = useState(initial?.title || initial?.name || '');
     const [questions, setQuestions] = useState(initial?.questions || []);
     const [isPublic, setIsPublic] = useState(initial?.public || false);
     const [saving, setSaving] = useState(false);

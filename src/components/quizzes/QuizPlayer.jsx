@@ -53,7 +53,7 @@ export default function QuizPlayer({ quiz, onFinish, onClose }) {
                         const isCorrect = userAnswer === correct;
                         return (
                             <div key={i} className={`review-item ${isCorrect ? 'review-correct' : 'review-wrong'}`}>
-                                <p className="review-question">{q.question}</p>
+                                <p className="review-question">{q.question || q.text}</p>
                                 <p className="review-answer">
                                     {isCorrect ? '✅' : '❌'} Twoja: {userAnswer >= 0 ? q.options[userAnswer] : '(czas)'}
                                     {!isCorrect && <> · Poprawna: <strong>{q.options[correct]}</strong></>}
@@ -83,7 +83,7 @@ export default function QuizPlayer({ quiz, onFinish, onClose }) {
                 <div className="quiz-progress-fill" style={{ width: `${((current) / questions.length) * 100}%` }} />
             </div>
 
-            <h3 className="quiz-question">{q.question}</h3>
+            <h3 className="quiz-question">{q.question || q.text}</h3>
 
             <div className="quiz-options">
                 {q.options.map((opt, i) => (

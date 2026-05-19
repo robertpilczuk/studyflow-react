@@ -23,7 +23,10 @@ export default function Dashboard() {
     const { decks, getDueCards } = useFlashcards();
 
     const avgScore = results.length
-        ? Math.round(results.reduce((a, r) => a + r.percentage, 0) / results.length)
+        ? (() => {
+            const valid = results.filter(r => typeof r.percentage === 'number' && !isNaN(r.percentage));
+            return valid.length ? Math.round(valid.reduce((a, r) => a + r.percentage, 0) / valid.length) : null;
+        })()
         : null;
 
     const dueCards = decks.reduce((acc, d) => acc + getDueCards(d).length, 0);
