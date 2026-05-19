@@ -48,7 +48,7 @@ export default function Quizzes() {
     };
 
     const copyShareLink = (id) => {
-        const url = `${window.location.origin}?quiz=${id}`;
+        const url = `${window.location.origin}/quiz?quiz=${id}`;
         navigator.clipboard.writeText(url);
         alert('Link skopiowany!');
     };
