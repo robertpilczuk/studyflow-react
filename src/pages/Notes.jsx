@@ -1,13 +1,15 @@
 import { useState, useMemo } from 'react';
-import { useNotes } from '../hooks/useNotes';
+import { useAppContext } from '../context/AppContext';
 import { useConfirm } from '../components/ui/ConfirmDialog';
+import { useActivityFeed } from '../hooks/useActivityFeed';
 import Modal from '../components/ui/Modal';
 import NoteEditor from '../components/notes/NoteEditor';
 import ExportPDFModal from '../components/notes/ExportPDFModal';
 
 export default function Notes() {
-    const { notes, loading, addNote, updateNote, deleteNote } = useNotes();
+    const { notes: { notes, addNote, updateNote, deleteNote, loading } } = useAppContext();
     const confirm = useConfirm();
+    const { logActivity } = useActivityFeed();
     const [search, setSearch] = useState('');
     const [filterCat, setFilterCat] = useState('');
     const [sort, setSort] = useState('updatedAt');
@@ -33,8 +35,13 @@ export default function Notes() {
     const closeModal = () => { setModalOpen(false); setEditing(null); };
 
     const handleSave = async (data) => {
-        if (editing) await updateNote(editing.id, data);
-        else await addNote(data);
+        if (editing) {
+            await updateNote(editing.id, data);
+            logActivity('note_edit', `Edytowano: ${data.title}`);
+        } else {
+            await addNote(data);
+            logActivity('note_add', `Dodano notatkę: ${data.title}`);
+        }
         closeModal();
     };
 

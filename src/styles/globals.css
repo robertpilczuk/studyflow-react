@@ -244,23 +244,25 @@ body,
 /* ── Stat cards ── */
 .stats-grid {
   display              : grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap                  : 12px;
   margin-bottom        : 2rem;
 }
 
 .stat-card {
-  background    : var(--bg-card);
-  border        : 1px solid var(--border);
-  border-radius : var(--radius-lg);
-  padding       : 1.25rem 1rem;
-  display       : flex;
-  flex-direction: column;
-  align-items   : center;
-  text-align    : center;
-  gap           : 4px;
-  transition    : all 0.15s;
-  cursor        : default;
+  background     : var(--bg-card);
+  border         : 1px solid var(--border);
+  border-radius  : var(--radius-lg);
+  padding        : 1.25rem 1rem;
+  display        : flex;
+  flex-direction : column;
+  align-items    : center;
+  text-align     : center;
+  gap            : 4px;
+  min-height     : 110px;
+  justify-content: center;
+  transition     : all 0.15s;
+  cursor         : default;
 }
 
 a .stat-card {
@@ -1126,7 +1128,22 @@ a .stat-card:hover {
   color     : var(--text-muted);
 }
 
-/* ── Gemini usage ── */
+/* ── Offline banner ── */
+.offline-banner {
+  display      : flex;
+  align-items  : center;
+  gap          : 0.75rem;
+  background   : rgba(251, 191, 36, 0.1);
+  border       : 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: var(--radius-lg);
+  padding      : 0.75rem 1.25rem;
+  margin-bottom: 1.5rem;
+  color        : var(--accent-amber);
+  font-size    : 14px;
+  font-weight  : 500;
+}
+
+
 .gemini-usage {
   display      : flex;
   align-items  : center;

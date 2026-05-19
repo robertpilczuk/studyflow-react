@@ -1,8 +1,7 @@
 import { useAuth } from '../context/AuthContext';
-import { useNotes } from '../hooks/useNotes';
-import { useQuizzes, useResults } from '../hooks/useQuizzes';
-import { useFlashcards } from '../hooks/useFlashcards';
+import { useAppContext } from '../context/AppContext';
 import { Link } from 'react-router-dom';
+import ActivityFeed from '../components/ui/ActivityFeed';
 
 function StatCard({ label, value, icon, to }) {
     const card = (
@@ -17,10 +16,7 @@ function StatCard({ label, value, icon, to }) {
 
 export default function Dashboard() {
     const { user } = useAuth();
-    const { notes } = useNotes();
-    const { quizzes } = useQuizzes();
-    const { results } = useResults();
-    const { decks, getDueCards } = useFlashcards();
+    const { notes: { notes }, quizzes: { quizzes }, results: { results }, flashcards: { decks, getDueCards } } = useAppContext();
 
     const avgScore = results.length
         ? (() => {
@@ -102,6 +98,9 @@ export default function Dashboard() {
                         </ul>
                     )}
                 </section>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+                <ActivityFeed />
             </div>
         </div>
     );

@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { useQuizzes } from '../hooks/useQuizzes';
+import { useAppContext } from '../context/AppContext';
 import { useGemini } from '../hooks/useGemini';
 import { useConfirm } from '../components/ui/ConfirmDialog';
+import { useRemoteConfig } from '../hooks/useRemoteConfig';
+import { useActivityFeed } from '../hooks/useActivityFeed';
 import Modal from '../components/ui/Modal';
 import QuizEditor from '../components/quizzes/QuizEditor';
 import QuizPlayer from '../components/quizzes/QuizPlayer';
 import GeminiUsage from '../components/ui/GeminiUsage';
 
 export default function Quizzes() {
-    const { quizzes, loading, addQuiz, updateQuiz, deleteQuiz, saveResult } = useQuizzes();
+    const { quizzes: { quizzes, loading, addQuiz, updateQuiz, deleteQuiz, saveResult } } = useAppContext();
     const { generateQuiz } = useGemini();
     const confirm = useConfirm();
+    const remoteConfig = useRemoteConfig();
+    const { logActivity } = useActivityFeed();
     const [modalMode, setModalMode] = useState(null); // null | 'new' | 'edit' | 'play' | 'generate'
     const [selected, setSelected] = useState(null);
     const [genTopic, setGenTopic] = useState('');
@@ -38,6 +42,7 @@ export default function Quizzes() {
         try {
             const questions = await generateQuiz(genTopic, genCount);
             await addQuiz({ title: `Quiz: ${genTopic}`, questions });
+            logActivity('ai_quiz', `Wygenerowano quiz AI: ${genTopic}`);
             closeModal();
         } catch (e) {
             setGenError(e.message);
@@ -47,7 +52,10 @@ export default function Quizzes() {
     };
 
     const handleFinish = async (score, total, review) => {
-        if (selected) await saveResult(selected.id, score, total);
+        if (selected) {
+            await saveResult(selected.id, score, total);
+            logActivity('quiz_complete', `Quiz: ${selected.title || selected.name} — ${score}/${total}`);
+        }
         closeModal();
     };
 
@@ -121,9 +129,16 @@ export default function Quizzes() {
             </Modal>
 
             {/* Play quiz */}
-            <Modal isOpen={modalMode === 'play'} onClose={closeModal} title={selected?.title || 'Quiz'}>
+            <Modal isOpen={modalMode === 'play'} onClose={closeModal} title={selected?.title || selected?.name || 'Quiz'}>
                 {selected && (
-                    <QuizPlayer quiz={selected} onFinish={handleFinish} onClose={closeModal} />
+                    <QuizPlayer
+                        quiz={{
+                            ...selected,
+                            timer: selected.timer || selected.timePerQuestion || remoteConfig.quiz_timer_seconds || null,
+                        }}
+                        onFinish={handleFinish}
+                        onClose={closeModal}
+                    />
                 )}
             </Modal>
 

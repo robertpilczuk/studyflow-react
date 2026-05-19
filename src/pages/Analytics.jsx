@@ -1,17 +1,17 @@
 import { useMemo } from 'react';
-import { useResults, useQuizzes } from '../hooks/useQuizzes';
-import { useNotes } from '../hooks/useNotes';
-import { useFlashcards } from '../hooks/useFlashcards';
+import { useAppContext } from '../context/AppContext';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
     ResponsiveContainer, LineChart, Line,
 } from 'recharts';
 
 export default function Analytics() {
-    const { results, loading } = useResults();
-    const { quizzes } = useQuizzes();
-    const { notes } = useNotes();
-    const { decks, getDueCards } = useFlashcards();
+    const {
+        results: { results, loading },
+        quizzes: { quizzes },
+        notes: { notes },
+        flashcards: { decks, getDueCards },
+    } = useAppContext();
 
     const avgScore = useMemo(() => {
         const valid = results.filter(r => typeof r.percentage === 'number' && !isNaN(r.percentage));

@@ -1,16 +1,18 @@
 import { useState } from 'react';
-import { useFlashcards } from '../hooks/useFlashcards';
+import { useAppContext } from '../context/AppContext';
 import { useGemini } from '../hooks/useGemini';
 import { useConfirm } from '../components/ui/ConfirmDialog';
+import { useActivityFeed } from '../hooks/useActivityFeed';
 import Modal from '../components/ui/Modal';
 import DeckEditor from '../components/flashcards/DeckEditor';
 import FlashcardReview from '../components/flashcards/FlashcardReview';
 import GeminiUsage from '../components/ui/GeminiUsage';
 
 export default function Flashcards() {
-    const { decks, loading, addDeck, updateDeck, deleteDeck, reviewCard, getDueCards } = useFlashcards();
+    const { flashcards: { decks, loading, addDeck, updateDeck, deleteDeck, reviewCard, getDueCards } } = useAppContext();
     const { generateFlashcards } = useGemini();
     const confirm = useConfirm();
+    const { logActivity } = useActivityFeed();
     const [modalMode, setModalMode] = useState(null);
     const [selected, setSelected] = useState(null);
     const [genTopic, setGenTopic] = useState('');
@@ -38,6 +40,7 @@ export default function Flashcards() {
         try {
             const cards = await generateFlashcards(genTopic, genCount);
             await addDeck({ title: `Fiszki: ${genTopic}`, cards });
+            logActivity('ai_flashcard', `Wygenerowano fiszki AI: ${genTopic}`);
             closeModal();
         } catch (e) {
             setGenError(e.message);
@@ -48,7 +51,10 @@ export default function Flashcards() {
 
     const handleReview = async (deckId, cardIndex, quality) => {
         const deck = decks.find(d => d.id === deckId);
-        if (deck) await reviewCard(deckId, cardIndex, quality, deck);
+        if (deck) {
+            await reviewCard(deckId, cardIndex, quality, deck);
+            if (cardIndex === 0) logActivity('flashcard_review', `Powtórka: ${deck.title}`);
+        }
     };
 
     return (
@@ -89,7 +95,13 @@ export default function Flashcards() {
                                         <button
                                             className="btn-primary btn-sm"
                                             onClick={() => { setSelected(deck); setModalMode('review'); }}
-                                        >▶ Ucz się</button>
+                                        >▶ Powtórka ({due})</button>
+                                    )}
+                                    {total > 0 && (
+                                        <button
+                                            className="btn-secondary btn-sm"
+                                            onClick={() => { setSelected(deck); setModalMode('review-all'); }}
+                                        >📖 Wszystkie</button>
                                     )}
                                     <button
                                         className="btn-secondary btn-sm"
@@ -116,6 +128,17 @@ export default function Flashcards() {
                     <FlashcardReview
                         deck={selected}
                         dueCards={getDueCards(selected)}
+                        onReview={(cardIndex, quality) => handleReview(selected.id, cardIndex, quality)}
+                        onClose={closeModal}
+                    />
+                )}
+            </Modal>
+
+            <Modal isOpen={modalMode === 'review-all'} onClose={closeModal} title={`${selected?.title || 'Fiszki'} — wszystkie`}>
+                {selected && (
+                    <FlashcardReview
+                        deck={selected}
+                        dueCards={selected.cards || []}
                         onReview={(cardIndex, quality) => handleReview(selected.id, cardIndex, quality)}
                         onClose={closeModal}
                     />

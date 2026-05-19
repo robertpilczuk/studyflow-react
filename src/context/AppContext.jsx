@@ -1,33 +1,23 @@
-import { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import { loadRemoteConfig } from '../firebase/config'
+import { createContext, useContext } from 'react';
+import { useNotes } from '../hooks/useNotes';
+import { useQuizzes, useResults } from '../hooks/useQuizzes';
+import { useFlashcards } from '../hooks/useFlashcards';
 
-const AppContext = createContext(null)
+const AppContext = createContext(null);
 
 export function AppProvider({ children }) {
-  const [rcConfig, setRcConfig] = useState({
-    max_notes_per_user: 50,
-    max_questions_per_quiz: 20,
-    quizzes_enabled: true,
-    app_theme: 'dark',
-  })
-  const [toast, setToast] = useState(null)
-
-  useEffect(() => {
-    loadRemoteConfig().then(setRcConfig)
-  }, [])
-
-  const showToast = useCallback((message, type = '') => {
-    setToast({ message, type, id: Date.now() })
-    setTimeout(() => setToast(null), 3000)
-  }, [])
+  const notes = useNotes();
+  const quizzes = useQuizzes();
+  const results = useResults();
+  const flashcards = useFlashcards();
 
   return (
-    <AppContext.Provider value={{ rcConfig, toast, showToast }}>
+    <AppContext.Provider value={{ notes, quizzes, results, flashcards }}>
       {children}
     </AppContext.Provider>
-  )
+  );
 }
 
-export function useApp() {
-  return useContext(AppContext)
+export function useAppContext() {
+  return useContext(AppContext);
 }
