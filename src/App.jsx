@@ -2,20 +2,21 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/shared/ProtectedRoute';
 import Layout from './components/layout/Layout';
-import LoadingScreen from './components/shared/LoadingScreen';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import Notes from './pages/Notes';
 import Quizzes from './pages/Quizzes';
 import Flashcards from './pages/Flashcards';
 import Analytics from './pages/Analytics';
+import PublicQuiz from './pages/PublicQuiz';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AuthProvider>
         <Routes>
           <Route path="/auth" element={<Auth />} />
+          <Route path="/quiz" element={<PublicQuiz />} />
           <Route path="/" element={
             <ProtectedRoute>
               <Layout>
